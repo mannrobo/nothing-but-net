@@ -1,5 +1,5 @@
 /**
- * pid.h - Implementation of Proportional Integral Derivative in ROBOTC
+ * pid.c - Implementation of Proportional Integral Derivative in ROBOTC
  * Copyright (c) 2016 Brendan McGuire. All rights reserved.
  * The code has been created for VEX 3796B "Some Assembly Required"
  * ALGORITHM:
