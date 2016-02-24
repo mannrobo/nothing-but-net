@@ -12,5 +12,6 @@ task usercontrol() {
     flywheel.target = 200;
     motor[LeftFlywheel] = flywheel.drive;
     motor[RightFlywheel] = flywheel.drive;
+    wait1Msec(20);
   }
 }
