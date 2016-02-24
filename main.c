@@ -4,8 +4,6 @@
 static PIDControlled flywheel;
 flywheel.IMEMotor = LeftFlywheel;
 
-static PIDControlled driveTrain;
-driveTrain.IMEMotor = DriveBackLeft;
 task usercontrol() {
   while (true) {
     PIDUpdate(&flywheel);
