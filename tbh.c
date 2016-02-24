@@ -1,4 +1,9 @@
 /**
+ * DEPRECATION NOTICE: This file has been deprecated by Brendan McGuire on 23-2-15
+ * use of this file is no longer recommended
+ *
+ * -----------------------------------------------------------------------------
+ *
  * tbh.c - A implementation of the Take Back Half algorithm
  * Copyright (c) Brendan McGuire 2016. All Rights Reserved.
  * This code has been created for Vex 3796B "Some Assembly Required"
