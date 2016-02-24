@@ -17,17 +17,17 @@
 /** Define Motor Gearings **/
 #define VEX_393_Standard    627.2
 #define VEX_393_HighSpeed   392.0
-#define VEX_393_Turbo       261.333
+#define VEX393Turbo       261.333
 
 typedef struct {
   /** Constants **/
-  float Kp = 5;
-  float Ki = 3;
-  float Kd = 0;
+  float Kp;
+  float Ki;
+  float Kd;
 
 
   // number of ticks in a revolution (for Vex 393 Turbo Motors)
-  float ticksPerRev = VEX_393_Turbo;
+  float ticksPerRev;
 
   // current values (raw: ticks, current: RPM)
   int currentCountRaw;
@@ -42,15 +42,15 @@ typedef struct {
   // Integral, the accumulate of all error
   int integral;
   // Derivative, the current error minus the last error
-  int derivative
+  int derivative;
 
   // Last error, used for calculating derivative
-  int lastError = 0;
+  int lastError;
   // The last time we did a motor check (should always be 20, since we don't have super heavy calculations)
-  long lastTime = nSysTime;
+  long lastTime;
 
   // The last IME count
-  int lastCount = 0;
+  int lastCount;
 
   // Total time (in ms) since last recalculating the velocity
   int deltaTime;
@@ -62,13 +62,13 @@ typedef struct {
 
   // Actual output to set your motors to
   int drive;
-} PIDControlled
+} PIDControlled;
 
 
 
 void PIDUpdateVelocity(PIDControlled *system) {
   // Get the current tick count from the motor encoder
-  system->currentRaw = nMotorEncoder[flywheel->IMEMotor];
+  system->currentCountRaw = nMotorEncoder[system->IMEMotor];
 
   // Recalculate the deltaTime
   system->deltaTime = nSysTime - system->lastTime;
@@ -79,12 +79,30 @@ void PIDUpdateVelocity(PIDControlled *system) {
   system->lastCount = system->currentCountRaw;
 
   // Update actual velocity
-  system->currentVelocity = (1000.0 / deltaTime) * deltaCount * (60 / system->ticksPerRev)
+  system->currentVelocity = (1000.0 / system->deltaTime) * system->deltaCount * (60 / system->ticksPerRev);
 }
+
+float motorPowerToRPM(int motorPower) {
+	return (motorPower / 127) * 240;
+}
+
+void PIDInit(PIDControlled *system, float kp, float ki, float kd, tMotor IMEMotor, float ticksPerRev) {
+	system->Kp = kp;
+	system->Ki = ki;
+	system->Kd = kd;
+	system->IMEMotor = IMEMotor;
+
+	system->lastError = 0;
+	system->lastTime = nSysTime;
+	system->lastCount = 0;
+
+	system->ticksPerRev = ticksPerRev;
+}
+
 
 void PIDUpdate(PIDControlled *system) {
   // Update velocity
-  PIDUpdateVelocity(&system);
+  //PIDUpdateVelocity(system);
   // Calculate error, for Proportional
   system->error = system->target - system->currentVelocity;
 
@@ -92,7 +110,7 @@ void PIDUpdate(PIDControlled *system) {
   system->integral += system->error * system->deltaTime;
 
   // Calculate derivative, the previous error minus the current error (divided by deltaTime)
-  system->derivative = (system->error - system->lastError) / system.deltaTime;
+  system->derivative = (system->error - system->lastError) / system->deltaTime;
 
 
   // Calculate final drive, the value to be sent to the motors
@@ -109,5 +127,5 @@ void PIDUpdate(PIDControlled *system) {
     system->drive = -127;
   }
   // Update last error
-  system->lastError = system.error
+  system->lastError = system->error;
 }
