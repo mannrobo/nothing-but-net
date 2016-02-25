@@ -84,9 +84,9 @@ task usercontrol() {
 		PIDUpdate(&flywheel);
 
 		flywheel.target = motorPowerToRPM(80);
-	  writeDebugStreamLine("flywheel.drive: %d", flywheel.drive);
+	  	writeDebugStreamLine("flywheel.drive: %d", flywheel.drive);
 
-	  // We use deltaTime so this doesn't matter, but it will ease calculations
-	  wait1Msec(20);
+	  	// We use deltaTime so this doesn't matter, but it will ease calculations
+	  	wait1Msec(20);
 	}
 }
